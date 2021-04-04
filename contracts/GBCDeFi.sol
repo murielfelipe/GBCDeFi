@@ -13,7 +13,7 @@ contract GBCDeFi is ERC721Enumerable {
     address public manager;
     uint256 private _tokenIndexCursor;
 
-    struct borrowNFT {
+    struct borrowNFT { 
         uint256 id;
         uint256 amount;
         uint256 rate;
@@ -30,8 +30,9 @@ contract GBCDeFi is ERC721Enumerable {
         manager = msg.sender;
     }
 
-    function createTokenLoan(address _addborrower, uint256 _amount)
-        public
+    //Function to create loan token by borrower  
+    function createTokenLoan(address _addborrower, uint256 _amount) 
+        public payable
         onlyManager
         returns (uint256)
     {
@@ -63,6 +64,8 @@ contract GBCDeFi is ERC721Enumerable {
         return _tokenIndexCursor - 1;
     }
 
+
+    //Function to get the value of the interest that the borrower needs to pay 
     function getvalueInterestLoan(address _addborrower)
         public
         view
@@ -73,7 +76,7 @@ contract GBCDeFi is ERC721Enumerable {
             tokens[_addborrower].amount != 0,
             "GBC DeFi: The borrower does not have a loan"
         );
-        //valueRate = tokens[_addborrower].rate;
+        //To find the days that the borrower has the loan
         uint256 daysLoan =
             ((((block.timestamp - tokens[_addborrower].initDate) / 60) / 60) /
                 24) > 0
@@ -83,6 +86,16 @@ contract GBCDeFi is ERC721Enumerable {
         return
             (daysLoan) *
             ((tokens[_addborrower].amount * tokens[_addborrower].rate) / 10000);
+    }
+
+    //Function to get the total value of the loan that the borrower needs to pay 
+    function getTotalValuePayTokenLoan(address _addborrower) public view returns(uint256){
+        //returns (uint){
+        require(
+            tokens[_addborrower].amount != 0,
+            "GBC DeFi: The borrower does not have a loan"
+        );
+        return tokens[_addborrower].amount + getvalueInterestLoan(_addborrower);
     }
 
     modifier onlyManager() {

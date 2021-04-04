@@ -53,6 +53,11 @@ contract("GBCDeFi", function (accounts){
             const valuetTX = await instanceContract.getvalueInterestLoan.call(account1)
             assert.equal(valuetTX, valurInterestLoan, `Interest value loan '${valuetTX}' is not as expected.`);
         });
+
+        it("Check getTotalValuePayTokenLoan function", async function () {
+          const valuetTX = await instanceContract.getTotalValuePayTokenLoan.call(account1)
+          assert.equal(valuetTX, (valurInterestLoan+loanAmount), `Total value loan '${valuetTX}' is not as expected.`);
+      });
     })
 
     describe("Reverts", () => {
@@ -92,5 +97,13 @@ contract("GBCDeFi", function (accounts){
               "GBC DeFi: The borrower does not have a loan"
             );
         });
+
+        it("Borrower should have a loan'", async () => {
+          await truffleAssert.fails(
+          instanceContract.getTotalValuePayTokenLoan.call(manager),
+            truffleAssert.ErrorType.REVERT,
+            "GBC DeFi: The borrower does not have a loan"
+          );
+      });
     })
 });

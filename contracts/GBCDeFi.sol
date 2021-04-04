@@ -4,11 +4,10 @@ pragma solidity ^0.8.0;
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol";
 //import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "./GBCDeFiOracleRate.sol";
 
 
-contract GBCDeFi is ERC721Enumerable {
+contract GBCDeFi is ERC721 {
     enum borrowNFTStatus {BORROWED, PAYED}
     address public manager;
     uint256 private _tokenIndexCursor;
